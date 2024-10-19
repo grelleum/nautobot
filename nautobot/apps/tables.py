@@ -15,6 +15,7 @@ from nautobot.core.tables import (
     TagColumn,
     ToggleColumn,
 )
+from nautobot.extras.plugins import TableExtension  # noqa: F401
 from nautobot.extras.tables import RoleTableMixin, StatusTableMixin
 
 __all__ = (

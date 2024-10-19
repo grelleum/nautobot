@@ -46,6 +46,13 @@ def banner(context, *args, **kwargs) -> Optional[Banner]:
             "<div>You are viewing a table of {}</div>",
             context["table"].Meta.model._meta.verbose_name_plural,
         )
+        if (
+            hasattr(context["table"].Meta, "extensions")
+            and getattr(context["table"].Meta, "extensions")
+        ):
+            content += format_html(
+                "<div><strong>This table has been modified by a TableExtension.</strong></div>",
+            )
         return Banner(content=content, banner_class=BannerClassChoices.CLASS_SUCCESS)
 
     content += format_html(

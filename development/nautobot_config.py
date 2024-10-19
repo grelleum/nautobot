@@ -9,7 +9,10 @@ from nautobot.core.settings import *  # noqa: F403  # undefined-local-with-impor
 # which we suppress on a case-by-case basis below
 from nautobot.core.settings_funcs import is_truthy
 
-SECRET_KEY = os.getenv("NAUTOBOT_SECRET_KEY", "012345678901234567890123456789012345678901234567890123456789")
+SECRET_KEY = os.getenv(
+    "NAUTOBOT_SECRET_KEY",
+    "012345678901234567890123456789012345678901234567890123456789",
+)
 
 #
 # Debugging defaults to True rather than False for the development environment
@@ -50,6 +53,8 @@ LOGGING["loggers"]["nautobot"]["level"] = LOG_LEVEL  # noqa: F405
 #     debug_db=False,  # Set to True to log all database queries
 #     plain_format=bool(DEBUG),  # Set to True to use human-readable structlog format over JSON
 # )
+
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 #
 # Plugins

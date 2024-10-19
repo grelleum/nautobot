@@ -720,7 +720,7 @@ def unittest(
     verbose=False,
     append=False,
     parallel=True,
-    parallel_workers=None,
+    parallel_workers=4,
     skip_docs_build=False,
     performance_report=False,
     performance_snapshot=False,
@@ -780,12 +780,55 @@ def unittest(
 
 
 @task
+def install_ipython(context):
+    print(f"{context=}")
+    command = "pip install ipython"
+    run_command(context, command)
+    print(f"{context=}")
+
+
+@task
+def shell_plus(context):
+    """Launch an interactive Nautobot shell."""
+    command = "nautobot-server shell_plus"
+    run_command(context, command)
+
+
+@task
+def coverage_html(context):
+    """Generate a coverage report."""
+    run_command(context, "coverage html --include '**/nautobot/*'")
+    run_command(context, "ls -ltrA | grep cov")
+
+
+@task
 def unittest_coverage(context):
     """Report on code test coverage as measured by 'invoke unittest'."""
-    run_command(context, "coverage combine")
+    run_command(context, "coverage combine ; true")
 
-    command = "coverage report --skip-covered --include 'nautobot/*'"
+    command = " ".join(
+        """
+        coverage report
+        --skip-covered
+        --include '**/nautobot/*'
+        --omit '**/migrations/*.py'
+        --omit '**/test_jobs/*'
+        --omit '**/testing/*'
+        --omit '**/tests/*'
+        """.split()
+    )
+    run_command(context, command)
 
+    command = " ".join(
+        """
+        coverage html
+        --include '**/nautobot/*'
+        --omit '**/migrations/*.py'
+        --omit '**/test_jobs/*'
+        --omit '**/testing/*'
+        --omit '**/tests/*'
+        """.split()
+    )
     run_command(context, command)
 
 
